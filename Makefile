@@ -38,7 +38,7 @@ BUILD_RELEASE_DIR=build_release
 BINDIR=quake2
 
 CC?=gcc
-BASE_CFLAGS=-mcpu=cortex-a8 -mfpu=neon -mfloat-abi=softfp -fdiagnostics-color=auto -fsigned-char
+BASE_CFLAGS=-mcpu=cortex-a8 -mfpu=neon -mfloat-abi=softfp -fdiagnostics-color=auto -fsigned-char -DPANDORA
 DEBUG_CFLAGS=$(BASE_CFLAGS) -g -ggdb -Wall -pipe
 RELEASE_CFLAGS=$(BASE_CFLAGS) -Ofast -ffast-math -funroll-loops -fomit-frame-pointer -fexpensive-optimizations
 
