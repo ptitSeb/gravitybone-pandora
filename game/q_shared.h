@@ -105,7 +105,10 @@ __inline int Q_vsnprintf (char *Dest, size_t Count, const char *Format, va_list 
 
 #define DECALS // whether to use decal system
 
+#ifndef PANDORA
+// Blooms are not GLES friendly, glCopyTex* functions kill the performances
 #define LIGHT_BLOOMS // whether to use light blooms
+#endif
 
 #define MD2_AS_MD3 // whether to load md2s into md3 memory representation
 
