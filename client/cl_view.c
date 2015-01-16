@@ -779,7 +779,7 @@ void SCR_DrawCrosshair (void)
 		*/
 
 				
-		keymsg = SCR_FindKey("+use",true);
+		keymsg = SCR_FindKey("+use");
 
 		//Com_Printf ("%s\n",keymsg);				
 

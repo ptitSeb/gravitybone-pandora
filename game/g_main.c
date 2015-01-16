@@ -235,8 +235,11 @@ game_export_t *GetGameAPI (game_import_t *import)
 
 	gl_driver = gi.cvar ("gl_driver", "", 0);
 	vid_ref = gi.cvar ("vid_ref", "", 0);
+	#ifdef __linux__
+        gl_driver_fog = gi.cvar ("gl_driver_fog", "libGL.so", CVAR_NOSET | CVAR_ARCHIVE);
+	#else
 	gl_driver_fog = gi.cvar ("gl_driver_fog", "opengl32", CVAR_NOSET | CVAR_ARCHIVE);
-
+	#endif
 	Fog_Init();
 
 	developer = gi.cvar("developer", "0", CVAR_SERVERINFO);

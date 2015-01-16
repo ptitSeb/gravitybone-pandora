@@ -24,6 +24,20 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "../game/q_shared.h"
 
+#ifdef __linux__
+#define stricmp strcasecmp
+#define strnicmp strncasecmp
+#define _stricmp strcasecmp
+#define _strnicmp strncasecmp
+#endif
+
+#ifndef min
+#define min(a, b) ((a)<(b))?(a):(b)
+#endif
+#ifndef max
+#define max(a, b) ((a)>(b))?(a):(b)
+#endif
+
 //rendered size of console font - everthing adjusts to this...
 #define	FONT_SIZE	con_font_size->value
 #define MENU_FONT_SIZE 8

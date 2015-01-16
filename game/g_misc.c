@@ -4207,7 +4207,7 @@ MISC_DEADSOLDIER MODEL PATCH
 #define MAX_SKINNAME	64
 #define DEADSOLDIER_MODEL "models/deadbods/dude/tris.md2"
 
-#include <direct.h>
+//#include <direct.h>
 #include "pak.h"
 
 int PatchDeadSoldier ()

@@ -239,7 +239,7 @@ void Text_Prev(edict_t *ent)
 void Do_Text_Display(edict_t *activator, int flags, char *message)
 {
 	int			/*i,*/ L;
-	char		*p1, *p2, *p3;
+	byte		*p1, *p2, *p3;
 	char		sound[64];
 	texthnd_t	*hnd;
 	byte		*temp_buffer;

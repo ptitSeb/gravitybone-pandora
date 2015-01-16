@@ -859,8 +859,11 @@ void R_Register( void )
 	cl_3dcam_dist = Cvar_Get ("cl_3dcam_dist", "50", CVAR_ARCHIVE);
 	cl_3dcam_alpha = Cvar_Get ("cl_3dcam_alpha", "0", CVAR_ARCHIVE);
 	cl_3dcam_adjust = Cvar_Get ("cl_3dcam_adjust", "1", CVAR_ARCHIVE);
-
-	gl_driver = Cvar_Get( "gl_driver", "opengl32", CVAR_ARCHIVE );
+	#ifdef __linux__
+        gl_driver = Cvar_Get( "gl_driver", "libGL.so", CVAR_ARCHIVE );
+	#else
+ 	gl_driver = Cvar_Get( "gl_driver", "opengl32", CVAR_ARCHIVE );
+	#endif
 	gl_allow_software = Cvar_Get( "gl_allow_software", "0", 0 );
 	gl_clear = Cvar_Get ("gl_clear", "0", 0);
 
@@ -1079,10 +1082,12 @@ qboolean R_Init ( void *hinstance, void *hWnd, char *reason )
 	// place default error
 	memcpy (reason, "Unknown failure on intialization!\0", 34);
 
+#ifdef _WIN32
 	// output system info
 	VID_Printf (PRINT_ALL, "OS: %s\n", Cvar_VariableString("sys_osVersion"));
 	VID_Printf (PRINT_ALL, "CPU: %s\n", Cvar_VariableString("sys_cpuString"));
 	VID_Printf (PRINT_ALL, "RAM: %s MB\n", Cvar_VariableString("sys_ramMegs"));
+#endif
 
 	// initialize our QGL dynamic bindings
 	if ( !QGL_Init( gl_driver->string ) )
@@ -1292,7 +1297,7 @@ qboolean R_Init ( void *hinstance, void *hWnd, char *reason )
 	gl_config.vertexBufferObject = false;
 	if ( strstr( gl_config.extensions_string, "GL_ARB_vertex_buffer_object" ) )
 	{
-		if (r_arb_vertex_buffer_object->value)
+		/*if (r_arb_vertex_buffer_object->value)
 		{
 			VID_Printf( PRINT_ALL, "...using GL_ARB_vertex_buffer_object\n" );
 			gl_config.vertexBufferObject = true;
@@ -1305,7 +1310,7 @@ qboolean R_Init ( void *hinstance, void *hWnd, char *reason )
 			qglMapBufferARB = (void *) qwglGetProcAddress( "glMapBufferARB" );
 			qglUnmapBufferARB = (void *) qwglGetProcAddress( "glUnmapBufferARB" );
 		}
-		else
+		else*/
 			VID_Printf( PRINT_ALL, "...ignoring GL_ARB_vertex_buffer_object\n");
 	}
 	else
@@ -1482,7 +1487,7 @@ qboolean R_Init ( void *hinstance, void *hWnd, char *reason )
 	}
 
 	// WGL_3DFX_gamma_control
-	if ( strstr(gl_config.extensions_string, "WGL_3DFX_gamma_control") )
+	/*if ( strstr(gl_config.extensions_string, "WGL_3DFX_gamma_control") )
 	{
 		if (!r_ignorehwgamma->value)
 		{
@@ -1493,7 +1498,7 @@ qboolean R_Init ( void *hinstance, void *hWnd, char *reason )
 		else
 			Com_Printf( "...ignoring WGL_3DFX_gamma_control\n" );
 	}
-	else
+	else*/
 		Com_Printf( "...WGL_3DFX_gamma_control not found\n" );
 
 

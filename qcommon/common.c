@@ -1609,7 +1609,7 @@ void Qcommon_Init (int argc, char **argv)
 {
 	char	*s;
 	char	*cfgfile; // Knightmare added
-	boolean	firsttime = false;
+	qboolean	firsttime = false;
 
 
 

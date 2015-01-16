@@ -433,7 +433,7 @@ void R_MarkLeaves (void);
 // r_alias_misc.c
 //
 #define NUMVERTEXNORMALS	162
-extern	float	r_avertexnormals[NUMVERTEXNORMALS][3];
+static float	r_avertexnormals[NUMVERTEXNORMALS][3];
 
 // precalculated dot products for quantized angles
 #define SHADEDOT_QUANT 16

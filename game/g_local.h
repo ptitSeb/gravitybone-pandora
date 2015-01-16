@@ -35,6 +35,23 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "km_cvar.h"
 #define JETPACK_MOD
 
+#ifndef _MAX_PATH
+#define _MAX_PATH 256
+#endif
+#ifdef __linux__
+#define stricmp strcasecmp
+#define strnicmp strncasecmp
+#define _stricmp strcasecmp
+#define _strnicmp strncasecmp
+#endif
+
+#ifndef min
+#define min(a, b) ((a)<(b))?(a):(b)
+#endif
+#ifndef max
+#define max(a, b) ((a)>(b))?(a):(b)
+#endif
+
 // the "gameversion" client command will print this plus compile date
 #define	GAMEVERSION	"lazarus"
 
@@ -1982,5 +1999,5 @@ qboolean	paused;
 //ZOID
 
 // ACEBOT_ADD
-#include "acesrc\acebot.h"
+#include "acesrc/acebot.h"
 // ACEBOT_END

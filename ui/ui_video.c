@@ -104,8 +104,11 @@ static void prepareVideoRefresh( void )
 {
 	//set the right mode for refresh
 	Cvar_Set( "vid_ref", "gl" );
+	#ifdef __linux__
+        Cvar_Set( "gl_driver", "libGL.so" );
+	#else
 	Cvar_Set( "gl_driver", "opengl32" );
-
+	#endif
 	//tell them they're modified so they refresh
 	vid_ref->modified = true;
 }

@@ -21,7 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "g_local.h"
 
-//#define DISABLE_FOG
+#define DISABLE_FOG
 
 /*#ifdef KMQUAKE2_ENGINE_MOD
 #define NEW_FOGSYS
@@ -31,7 +31,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 void Fog_Init()
 {
 }
-void Fog(vec3_t viewpoint)
+void Fog(edict_t *ent)
 {
 }
 void Fog_Off()
@@ -116,9 +116,16 @@ void Fog_Off (edict_t *player_ent)
 OLD FOG SYSTEM
 =================================================
 */
+#ifdef __linux__
+#include <GL/glx.h>
+#include <GL/gl.h>
+#else
 #include <windows.h>
 #define __MSC__
 #include <gl/gl.h>
+
+HMODULE		hOpenGL;
+#endif
 
 fog_t		gfogs[MAX_FOGS];
 
@@ -126,7 +133,6 @@ fog_t		trig_fade_fog;
 fog_t		fade_fog;
 fog_t		*pfog;
 
-HMODULE		hOpenGL;
 
 qboolean	InTriggerFog;
 float		last_software_frame;

@@ -22,6 +22,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "g_local.h"
 #include "pak.h"
 
+#ifndef _MAX_PATH
+#define _MAX_PATH 256
+#endif
 
 void SP_target_freeze(edict_t *self);
 void SP_target_viewlock(edict_t *self);
