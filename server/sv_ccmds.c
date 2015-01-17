@@ -717,8 +717,9 @@ SV_Savegame_f
 
 ==============
 */
+/*
 extern	char fs_gamedir[MAX_OSPATH];
-
+*/
 void SV_Savegame_f (void)
 {
 	char	*dir;
@@ -731,12 +732,13 @@ void SV_Savegame_f (void)
 
 	// Knightmare- fs_gamedir may be getting messed up, causing it to occasinally save in the root dir,
 	// thus leading to a hang on game loads, so we reset it here.
+	/*
 	if (!fs_gamedir[0])
 	{
 		if (fs_gamedirvar->string[0])
 			Com_sprintf (fs_gamedir, sizeof(fs_gamedir), "%s/%s", fs_basedir->string, fs_gamedirvar->string);
 	}
-
+*/ //SEB not sure here
 	if (Cmd_Argc() != 2)
 	{
 		Com_Printf ("USAGE: savegame <directory>\n");

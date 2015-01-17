@@ -106,7 +106,7 @@ fsLink_t		*fs_links;
 fsSearchPath_t	*fs_searchPaths;
 fsSearchPath_t	*fs_baseSearchPaths;
 
-char			fs_gamedir[MAX_OSPATH];
+char			fs_gamedir[MAX_OSPATH] = "";
 static char		fs_currentGame[MAX_QPATH];
 
 static char				fs_fileInPath[MAX_OSPATH];
@@ -125,6 +125,7 @@ cvar_t	*fs_debug;
 
 void CDAudio_Stop (void);
 
+char *Sys_GetCurrentDirectory (void);
 
 /*
 =================
@@ -276,11 +277,19 @@ Called to find where to write a file (demos, savegames, etc...)
 */
 char *FS_GameDir (void)
 {
+	if (fs_gamedir[0]=='\0') {
+		strcpy(fs_gamedir, Sys_GetCurrentDirectory());
+		strcat(fs_gamedir, "/baseq2");
+	}
 	return fs_gamedir;
 }
 
 char *FS_Gamedir (void)
 {
+	if (fs_gamedir[0]=='\0') {
+		strcpy(fs_gamedir, Sys_GetCurrentDirectory());
+		strcat(fs_gamedir, "/baseq2");
+	}
 	return fs_gamedir;
 }
 
@@ -1405,7 +1414,6 @@ void FS_Startup (void)
 			Z_Free(fs_searchPaths);
 			fs_searchPaths = next;
 		}
-
 		if (!stricmp(fs_gamedirvar->string, BASEDIRNAME))	// Don't add baseq2 again
 			strcpy(fs_gamedir, fs_basedir->string);
 		else
@@ -1414,7 +1422,6 @@ void FS_Startup (void)
 			FS_AddGameDirectory(va("%s/%s", fs_homepath->string, fs_gamedirvar->string));
 		}
 	}
-
 	strcpy(fs_currentGame, fs_gamedirvar->string);
 
 	FS_Path_f();
@@ -1427,7 +1434,6 @@ FS_Init
 */
 void FS_Dir_f (void);
 void FS_Link_f (void);
-char *Sys_GetCurrentDirectory (void);
 
 void FS_InitFilesystem (void)
 {

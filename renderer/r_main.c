@@ -624,9 +624,11 @@ void R_RenderView (refdef_t *fd)
 
 	R_PushDlights ();
 
+#ifndef PANDORA
 	if (r_finish->value)
 		qglFinish ();
-
+#endif
+	
 	R_SetupFrame ();
 
 	R_SetFrustum ();
@@ -916,8 +918,13 @@ void R_Register( void )
 	r_dynamic = Cvar_Get ("r_dynamic", "1", 0);
 	r_nobind = Cvar_Get ("r_nobind", "0", CVAR_CHEAT);
 	r_round_down = Cvar_Get ("r_round_down", "1", 0);
+#ifdef PANDORA
+	r_picmip = Cvar_Get ("r_picmip", "1", 0);
+	r_skymip = Cvar_Get ("r_skymip", "1", 0);
+#else
 	r_picmip = Cvar_Get ("r_picmip", "0", 0);
 	r_skymip = Cvar_Get ("r_skymip", "0", 0);
+#endif
 	r_showtris = Cvar_Get ("r_showtris", "0", CVAR_CHEAT);
 	r_showbbox = Cvar_Get ("r_showbbox", "0", CVAR_CHEAT); // show model bounding box
 	r_ztrick = Cvar_Get ("r_ztrick", "0", 0);
