@@ -895,7 +895,7 @@ void CL_ParsePlayerstate (frame_t *oldframe, frame_t *newframe)
 		// parse stats
 		statbits = MSG_ReadLong (&net_message);
 		for (i = 0; i < MAX_STATS; i++)
-			if (statbits & (1<<i) )
+			if (statbits & (1<<(i%8)) )
 				state->stats[i] = MSG_ReadShort(&net_message);
 	} //end new CL_ParsePlayerstate code
 }

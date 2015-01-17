@@ -468,10 +468,10 @@ void SV_WritePlayerstateToClient (client_frame_t *from, client_frame_t *to, size
 	statbits = 0;
 	for (i=0 ; i<MAX_STATS ; i++)
 		if (ps->stats[i] != ops->stats[i])
-			statbits |= 1<<i;
+			statbits |= 1<<(i%8);
 	MSG_WriteLong (msg, statbits);
 	for (i=0 ; i<MAX_STATS ; i++)
-		if (statbits & (1<<i) )
+		if (statbits & (1<<(i%8)) )
 			MSG_WriteShort (msg, ps->stats[i]);
 }
 
