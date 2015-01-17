@@ -53,6 +53,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define idaxp	0
 #endif
 
+#ifdef __ARM_NEON__
+#define NEON
+#endif
+
+#ifdef NEON
+#include <arm_neon.h>
+#endif
+
 typedef unsigned char 		byte;
 typedef enum {false, true}	qboolean;
 
@@ -235,7 +243,7 @@ extern vec3_t vec3_origin;
 // microsoft's fabs seems to be ungodly slow...
 //float Q_fabs (float f);
 //#define	fabs(f) Q_fabs(f)
-#if !defined C_ONLY && !defined __linux__ && !defined __sgi
+#if (!defined C_ONLY && !defined __linux__ && !defined __sgi) || defined NEON
 extern long Q_ftol( float f );
 #else
 #define Q_ftol( f ) ( long ) (f)

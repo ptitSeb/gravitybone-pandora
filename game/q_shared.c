@@ -276,6 +276,12 @@ __declspec( naked ) long Q_ftol( float f )
 	__asm ret
 }
 #pragma warning (default:4035)
+#elif defined NEON
+long Q_ftol( float f)
+{
+	int32x2_t b = vcvt_s32_f32(vdup_n_f32(f));
+	return b[0];
+}
 #endif
 
 /*
@@ -352,7 +358,6 @@ Returns 1, 2, or 1 + 2
 #if !id386 || defined __linux__ 
 int BoxOnPlaneSide (vec3_t emins, vec3_t emaxs, struct cplane_s *p)
 {
-	float	dist1, dist2;
 	int		sides;
 
 // fast axial cases
@@ -364,54 +369,130 @@ int BoxOnPlaneSide (vec3_t emins, vec3_t emaxs, struct cplane_s *p)
 			return 2;
 		return 3;
 	}
+	#ifdef NEON
+	float32x2_t dist12;
+	float32x2_t tmp1, tmp2, tmp3;
+	#else
+	float	dist1, dist2;
+	#endif
 	
 // general case
 	switch (p->signbits)
 	{
 	case 0:
+	#ifdef NEON
+	tmp1[0] = emaxs[0]; tmp1[1]=emins[0];
+	tmp2[0] = emaxs[1]; tmp2[1]=emins[1];
+	tmp3[0] = emaxs[2]; tmp3[1]=emins[2];
+	dist12 = vadd_f32(vadd_f32(vmul_n_f32(tmp1, p->normal[0]), vmul_n_f32(tmp2, p->normal[1])), vmul_n_f32(tmp3, p->normal[2]));
+	#else
 dist1 = p->normal[0]*emaxs[0] + p->normal[1]*emaxs[1] + p->normal[2]*emaxs[2];
 dist2 = p->normal[0]*emins[0] + p->normal[1]*emins[1] + p->normal[2]*emins[2];
+	#endif
 		break;
 	case 1:
+	#ifdef NEON
+	tmp1[0] = emins[0]; tmp1[1]=emaxs[0];
+	tmp2[0] = emaxs[1]; tmp2[1]=emins[1];
+	tmp3[0] = emaxs[2]; tmp3[1]=emins[2];
+	dist12 = vadd_f32(vadd_f32(vmul_n_f32(tmp1, p->normal[0]), vmul_n_f32(tmp2, p->normal[1])), vmul_n_f32(tmp3, p->normal[2]));
+	#else
 dist1 = p->normal[0]*emins[0] + p->normal[1]*emaxs[1] + p->normal[2]*emaxs[2];
 dist2 = p->normal[0]*emaxs[0] + p->normal[1]*emins[1] + p->normal[2]*emins[2];
+	#endif
 		break;
 	case 2:
+	#ifdef NEON
+	tmp1[0] = emaxs[0]; tmp1[1]=emins[0];
+	tmp2[0] = emins[1]; tmp2[1]=emaxs[1];
+	tmp3[0] = emaxs[2]; tmp3[1]=emins[2];
+	dist12 = vadd_f32(vadd_f32(vmul_n_f32(tmp1, p->normal[0]), vmul_n_f32(tmp2, p->normal[1])), vmul_n_f32(tmp3, p->normal[2]));
+	#else
 dist1 = p->normal[0]*emaxs[0] + p->normal[1]*emins[1] + p->normal[2]*emaxs[2];
 dist2 = p->normal[0]*emins[0] + p->normal[1]*emaxs[1] + p->normal[2]*emins[2];
+	#endif
 		break;
 	case 3:
+	#ifdef NEON
+	tmp1[0] = emins[0]; tmp1[1]=emaxs[0];
+	tmp2[0] = emins[1]; tmp2[1]=emaxs[1];
+	tmp3[0] = emaxs[2]; tmp3[1]=emins[2];
+	dist12 = vadd_f32(vadd_f32(vmul_n_f32(tmp1, p->normal[0]), vmul_n_f32(tmp2, p->normal[1])), vmul_n_f32(tmp3, p->normal[2]));
+	#else
 dist1 = p->normal[0]*emins[0] + p->normal[1]*emins[1] + p->normal[2]*emaxs[2];
 dist2 = p->normal[0]*emaxs[0] + p->normal[1]*emaxs[1] + p->normal[2]*emins[2];
+	#endif
 		break;
 	case 4:
+	#ifdef NEON
+	tmp1[0] = emaxs[0]; tmp1[1]=emins[0];
+	tmp2[0] = emaxs[1]; tmp2[1]=emins[1];
+	tmp3[0] = emins[2]; tmp3[1]=emaxs[2];
+	dist12 = vadd_f32(vadd_f32(vmul_n_f32(tmp1, p->normal[0]), vmul_n_f32(tmp2, p->normal[1])), vmul_n_f32(tmp3, p->normal[2]));
+	#else
 dist1 = p->normal[0]*emaxs[0] + p->normal[1]*emaxs[1] + p->normal[2]*emins[2];
 dist2 = p->normal[0]*emins[0] + p->normal[1]*emins[1] + p->normal[2]*emaxs[2];
+	#endif
 		break;
 	case 5:
+	#ifdef NEON
+	tmp1[0] = emins[0]; tmp1[1]=emaxs[0];
+	tmp2[0] = emaxs[1]; tmp2[1]=emins[1];
+	tmp3[0] = emins[2]; tmp3[1]=emaxs[2];
+	dist12 = vadd_f32(vadd_f32(vmul_n_f32(tmp1, p->normal[0]), vmul_n_f32(tmp2, p->normal[1])), vmul_n_f32(tmp3, p->normal[2]));
+	#else
 dist1 = p->normal[0]*emins[0] + p->normal[1]*emaxs[1] + p->normal[2]*emins[2];
 dist2 = p->normal[0]*emaxs[0] + p->normal[1]*emins[1] + p->normal[2]*emaxs[2];
+	#endif
 		break;
 	case 6:
+	#ifdef NEON
+	tmp1[0] = emaxs[0]; tmp1[1]=emins[0];
+	tmp2[0] = emins[1]; tmp2[1]=emaxs[1];
+	tmp3[0] = emins[2]; tmp3[1]=emaxs[2];
+	dist12 = vadd_f32(vadd_f32(vmul_n_f32(tmp1, p->normal[0]), vmul_n_f32(tmp2, p->normal[1])), vmul_n_f32(tmp3, p->normal[2]));
+	#else
 dist1 = p->normal[0]*emaxs[0] + p->normal[1]*emins[1] + p->normal[2]*emins[2];
 dist2 = p->normal[0]*emins[0] + p->normal[1]*emaxs[1] + p->normal[2]*emaxs[2];
+	#endif
 		break;
 	case 7:
+	#ifdef NEON
+	tmp1[0] = emins[0]; tmp1[1]=emaxs[0];
+	tmp2[0] = emins[1]; tmp2[1]=emaxs[1];
+	tmp3[0] = emins[2]; tmp3[1]=emaxs[2];
+	dist12 = vadd_f32(vadd_f32(vmul_n_f32(tmp1, p->normal[0]), vmul_n_f32(tmp2, p->normal[1])), vmul_n_f32(tmp3, p->normal[2]));
+	#else
 dist1 = p->normal[0]*emins[0] + p->normal[1]*emins[1] + p->normal[2]*emins[2];
 dist2 = p->normal[0]*emaxs[0] + p->normal[1]*emaxs[1] + p->normal[2]*emaxs[2];
+	#endif
 		break;
 	default:
+		#ifdef NEON
+		dist12=vdup_n_f32(0.0f);
+		#else
 		dist1 = dist2 = 0;		// shut up compiler
+		#endif
 		assert( 0 );
 		break;
 	}
 
 	sides = 0;
+	#ifdef NEON
+	uint32x2_t res;
+	tmp1 = vdup_n_f32(p->dist);
+	res = vcge_f32(dist12, tmp1);
+	if (res[0])
+		sides = 1;
+	res = vclt_f32(dist12, tmp1);
+	if (res[1])
+		sides |= 2;
+	#else
 	if (dist1 >= p->dist)
 		sides = 1;
 	if (dist2 < p->dist)
 		sides |= 2;
-
+	#endif
 	assert( sides != 0 );
 
 	return sides;
@@ -718,13 +799,32 @@ vec_t VectorNormalize2 (vec3_t v, vec3_t out)
 	return length;
 }
 
+#ifdef NEON
+void VectorMA(vec3_t veca, float scale, vec3_t vecb, vec3_t vecc) {
+        asm volatile (
+        "vld1.32                {d0}, [%0]                  \n\t"   //d0={x0,y0}
+        "flds                   s2, [%0, #8]	            		\n\t"   //d1[0]={z0}
+        "vld1.32                {d2}, [%2]                      \n\t"   //d2={x1,y1}
+        "flds                   s6, [%2, #8] 	  				\n\t"   //d3[0]={z1}
+		"vmov.32				s8, %1							\n\t"
+        "vdup.f32				d4, d4[0]						\n\t"	//d4=scale
+        
+        "vmla.f32				d0, d2, d4						\n\t"
+        "vmla.f32				d1, d3, d4						\n\t"
+        "vst1.32				d0, [%3]						\n\t"
+        "fsts                   s2, [%3, #8]                       \n\t"   //
+		: "+&r"(veca), "+&r"(scale), "+&r"(vecb), "+&r" (vecc):
+		: "d0", "d1", "d2", "d3", "d4", "memory"        
+		);
+}
+#else
 void VectorMA (vec3_t veca, float scale, vec3_t vecb, vec3_t vecc)
 {
 	vecc[0] = veca[0] + scale*vecb[0];
 	vecc[1] = veca[1] + scale*vecb[1];
 	vecc[2] = veca[2] + scale*vecb[2];
 }
-
+#endif
 
 vec_t _DotProduct (vec3_t v1, vec3_t v2)
 {
@@ -754,9 +854,35 @@ void _VectorCopy (vec3_t in, vec3_t out)
 
 void CrossProduct (vec3_t v1, vec3_t v2, vec3_t cross)
 {
+#ifdef NEON
+        asm volatile (
+        "flds                   s3, [%0]                        \n\t"   //d1[1]={x0}
+        "add                    %0, %0, #4                      \n\t"   //
+        "vld1.32                {d0}, [%0]                      \n\t"   //d0={y0,z0}
+        "vmov.f32               s2, s1                          \n\t"   //d1[0]={z0}
+
+        "flds                   s5, [%1]                        \n\t"   //d2[1]={x1}
+        "add                    %1, %1, #4                      \n\t"   //
+        "vld1.32                {d3}, [%1]                      \n\t"   //d3={y1,z1}
+        "vmov.f32               s4, s7                          \n\t"   //d2[0]=d3[1]
+        
+        "vmul.f32               d4, d0, d2                      \n\t"   //d4=d0*d2
+        "vmls.f32               d4, d1, d3                      \n\t"   //d4-=d1*d3
+        
+        "vmul.f32               d5, d3, d1[1]           		\n\t"   //d5=d3*d1[1]
+        "vmls.f32               d5, d0, d2[1]          		 	\n\t"   //d5-=d0*d2[1]
+        
+        "vst1.32                d4, [%2]                        \n\t"   //
+        "fsts                   s10, [%2, #8]                       \n\t"   //
+        
+        : "+&r"(v1), "+&r"(v2), "+&r"(cross):
+		: "d0", "d1", "d2", "d3", "d4", "d5", "memory"
+        );      
+#else	
 	cross[0] = v1[1]*v2[2] - v1[2]*v2[1];
 	cross[1] = v1[2]*v2[0] - v1[0]*v2[2];
 	cross[2] = v1[0]*v2[1] - v1[1]*v2[0];
+#endif
 }
 
 double sqrt(double x);
