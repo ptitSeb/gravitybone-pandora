@@ -610,9 +610,11 @@ void R_RenderParticle (particle_t *p)
 		for (i=0; i<8; i++)
 		{
 			angle = i * 22.5;
-			v[0]=p->origin[0] - p->angle[0]*size + (right[0]*cos(angle) + up[0]*sin(angle));
-			v[1]=p->origin[1] - p->angle[1]*size + (right[1]*cos(angle) + up[1]*sin(angle));
-			v[2]=p->origin[2] - p->angle[2]*size + (right[2]*cos(angle) + up[2]*sin(angle));
+			const float sinA = sinf(angle);
+			const float cosA = cosf(angle);
+			v[0]=p->origin[0] - p->angle[0]*size + (right[0]*cosA + up[0]*sinA);
+			v[1]=p->origin[1] - p->angle[1]*size + (right[1]*cosA + up[1]*sinA);
+			v[2]=p->origin[2] - p->angle[2]*size + (right[2]*cosA + up[2]*sinA);
 
 			VA_SetElem3(vertexArray[rb_vertex], v[0], v[1], v[2]);
 			VA_SetElem4(colorArray[rb_vertex], 0, 0, 0, 0);
