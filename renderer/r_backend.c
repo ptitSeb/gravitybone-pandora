@@ -240,7 +240,7 @@ void RB_DrawArrays (GLenum polyMode)
 		return;
 
 	GL_LockArrays (rb_vertex);
-	if (0/*gl_config.drawRangeElements*/)
+	if (gl_config.drawRangeElements)
 		qglDrawRangeElementsEXT(polyMode, 0, rb_vertex, rb_index, GL_UNSIGNED_INT, indexArray);
 	else
 		qglDrawElements(polyMode, rb_index, GL_UNSIGNED_INT, indexArray);

@@ -879,7 +879,11 @@ void R_Register( void )
 	r_lerpmodels = Cvar_Get ("r_lerpmodels", "1", 0);
 	r_speeds = Cvar_Get ("r_speeds", "0", 0);
 	// hardware gamma
+	#ifdef PANDORA
+	r_ignorehwgamma = Cvar_Get ("r_ignorehwgamma", "1", CVAR_ARCHIVE);
+	#else
 	r_ignorehwgamma = Cvar_Get ("r_ignorehwgamma", "0", CVAR_ARCHIVE);
+	#endif
 
 	// lerped dlights on models
 	r_dlights_normal = Cvar_Get("r_dlights_normal", "1", CVAR_ARCHIVE);
@@ -915,13 +919,14 @@ void R_Register( void )
 	r_shadowvolumes = Cvar_Get ("r_shadowvolumes", "0", CVAR_CHEAT );
 	r_stencil = Cvar_Get ("r_stencil", "1", CVAR_ARCHIVE );
 
-	r_dynamic = Cvar_Get ("r_dynamic", "1", 0);
 	r_nobind = Cvar_Get ("r_nobind", "0", CVAR_CHEAT);
 	r_round_down = Cvar_Get ("r_round_down", "1", 0);
 #ifdef PANDORA
+	r_dynamic = Cvar_Get ("r_dynamic", "0", 0);	// dynamix with it's frequend gltexSubImage2D is not GLES friendly
 	r_picmip = Cvar_Get ("r_picmip", "1", 0);
 	r_skymip = Cvar_Get ("r_skymip", "1", 0);
 #else
+	r_dynamic = Cvar_Get ("r_dynamic", "1", 0);
 	r_picmip = Cvar_Get ("r_picmip", "0", 0);
 	r_skymip = Cvar_Get ("r_skymip", "0", 0);
 #endif
@@ -948,7 +953,11 @@ void R_Register( void )
 	//gl_ext_pointparameters = Cvar_Get( "gl_ext_pointparameters", "1", CVAR_ARCHIVE );
 	r_ext_swapinterval = Cvar_Get( "r_ext_swapinterval", "1", CVAR_ARCHIVE );
 	r_ext_multitexture = Cvar_Get( "r_ext_multitexture", "1", CVAR_ARCHIVE );
+#ifdef PANDORA
+	r_ext_draw_range_elements = Cvar_Get("r_ext_draw_range_elements", "0", CVAR_ARCHIVE | CVAR_LATCH);
+#else
 	r_ext_draw_range_elements = Cvar_Get("r_ext_draw_range_elements", "1", CVAR_ARCHIVE | CVAR_LATCH);
+#endif
 	r_ext_compiled_vertex_array = Cvar_Get( "r_ext_compiled_vertex_array", "1", CVAR_ARCHIVE );
 
 	// added Vic's overbright rendering
@@ -981,7 +990,11 @@ void R_Register( void )
 	//r_motionblur = Cvar_Get( "r_motionblur", "0", CVAR_ARCHIVE );	// motionblur
 
 	r_drawbuffer = Cvar_Get( "r_drawbuffer", "GL_BACK", 0 );
+#ifdef PANDORA
+	r_swapinterval = Cvar_Get( "r_swapinterval", "0", CVAR_ARCHIVE );
+#else
 	r_swapinterval = Cvar_Get( "r_swapinterval", "1", CVAR_ARCHIVE );
+#endif
 
 	r_saturatelighting = Cvar_Get( "r_saturatelighting", "0", 0 );
 
@@ -1186,11 +1199,7 @@ qboolean R_Init ( void *hinstance, void *hWnd, char *reason )
 
 	Cvar_Set( "scr_drawall", "0" );
 
-#ifdef __linux__
-	Cvar_SetValue( "r_finish", 1 );
-#else
 	Cvar_SetValue( "r_finish", 0 );
-#endif
 
 	// MCD has buffering issues
 	if (gl_config.rendType == GLREND_MCD)
@@ -1674,6 +1683,8 @@ void R_BeginFrame( float camera_separation )
 	/*
 	** draw buffer stuff
 	*/
+#ifndef PANDORA
+	// no need to waste time, there is no stereo rendering on Pandora
 	if ( r_drawbuffer->modified )
 	{
 		r_drawbuffer->modified = false;
@@ -1686,7 +1697,7 @@ void R_BeginFrame( float camera_separation )
 				qglDrawBuffer( GL_BACK );
 		}
 	}
-
+#endif
 	/*
 	** texturemode stuff
 	*/
