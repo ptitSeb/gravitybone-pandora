@@ -32,10 +32,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #endif
 
 #ifndef min
-#define min(a, b) ((a)<(b))?(a):(b)
+#define min(a, b) ((a)<(b)?(a):(b))
 #endif
 #ifndef max
-#define max(a, b) ((a)>(b))?(a):(b)
+#define max(a, b) ((a)>(b)?(a):(b))
 #endif
 
 //rendered size of console font - everthing adjusts to this...
