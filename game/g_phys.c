@@ -1388,6 +1388,8 @@ Non moving objects can only think
 void SV_Physics_None (edict_t *ent)
 {
 // regular thinking
+	if (ent->s.number == 34) return;	// from D-Sinclair
+
 	SV_RunThink (ent);
 }
 

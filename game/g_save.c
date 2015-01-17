@@ -84,6 +84,7 @@ field_t fields[] = {
 	{"use", FOFS(use), F_FUNCTION, FFL_NOSPAWN},
 	{"pain", FOFS(pain), F_FUNCTION, FFL_NOSPAWN},
 	{"die", FOFS(die), F_FUNCTION, FFL_NOSPAWN},
+	{"play",FOFS(play), F_FUNCTION, FFL_NOSPAWN},  //AH added, someone missed this one
 
 	{"stand", FOFS(monsterinfo.stand), F_FUNCTION, FFL_NOSPAWN},
 	{"idle", FOFS(monsterinfo.idle), F_FUNCTION, FFL_NOSPAWN},
