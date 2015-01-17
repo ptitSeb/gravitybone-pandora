@@ -105,8 +105,10 @@ __inline int Q_vsnprintf (char *Dest, size_t Count, const char *Format, va_list 
 
 #define DECALS // whether to use decal system
 
-#ifndef PANDORA
+#ifdef PANDORA
 // Blooms are not GLES friendly, glCopyTex* functions kill the performances
+#undef LIGHT_BLOOMS
+#else
 #define LIGHT_BLOOMS // whether to use light blooms
 #endif
 
